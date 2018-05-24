@@ -8,7 +8,7 @@ fi
 NB=9
 
 printf "Creating rules...\n"
-java -jar Sudoku-SAT-Solver.jar $1 | sed '/^\s*$/d'
+java -jar RulesGenerator.jar $1 | sed '/^\s*$/d'
 printf "Rules created.\n"
 printf "Converting to CNF...\n"
 ./logic2cnf -c out.txt > out.cnf
@@ -22,7 +22,7 @@ conv=$(grep l1c1v1 -A $(($NB*$NB*$NB)) out.cnf | sed 's/  */ /g' | cut -d' ' -f3
 declare -A CONVERSIONMAP=();
 
 while read -r line; do
-     CONVERSIONMAP[$(echo $line | cut -d' ' -f1)]=$(echo $line | cut -d' ' -f2)
+     CONVERSIONMAP[$(echo ${line} | cut -d' ' -f1)]=$(echo ${line} | cut -d' ' -f2)
 done <<< "$conv"
 
 
