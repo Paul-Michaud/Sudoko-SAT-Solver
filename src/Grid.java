@@ -134,7 +134,6 @@ public class Grid {
                             this.writer.print("l"+(3 * i + line) + "c" + (3 * j + col) + "v"+val);
                             if(col*line!=9) this.writer.print("+");
                         }
-
                     }
                     this.writer.print(")");
                     if(val<9)this.writer.print(".");
