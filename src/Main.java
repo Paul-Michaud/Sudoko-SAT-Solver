@@ -1,7 +1,6 @@
 public class Main {
 
     public static void main(String[] args) {
-        //String file="./grid1.txt";
         if(args.length != 1) {
             System.out.println("1 argument attendu");
             System.exit(1);
@@ -11,13 +10,9 @@ public class Main {
         Grid grid = new Grid(file);
 
         grid.initWriter();
-
         grid.generateVars();
         grid.generateRules();
-
         grid.closeWriter();
-
-
 
     }
 }

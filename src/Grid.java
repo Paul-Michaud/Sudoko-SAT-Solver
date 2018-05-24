@@ -49,87 +49,100 @@ public class Grid {
     }
 
     public void generateRules() {
-        //caseRules();
-        //this.writer.println(".");
-
+        writeTrueValues();
+        caseRules();
         linesRules();
         this.writer.println(".");
-        //columnRules();
-        //blocRules();
+        colRules();
+        this.writer.println(".");
+        blocRules();
+        this.writer.println(";");
     }
 
-    public void caseRules() {
-        //pour chaque case du plateau
-        // ( 1 . ~2  . ~3 . ... . ~9) +
-        // (~1 .  2  . ~3 . ... . ~9) +
-        // (~1 . ~2  .  3 .~4 . ... . ~9) +
-        // ...
-        // (~1 . ~2 . ... . ~8 . 9)
-        this.writer.print("(");
-        for(int i = 1; i<=9; i++) {
-            for(int j = 1; j<=9; j++) {
-                //chaque case
-                this.writer.print("(");
-                for(int k = 1; k<=9; k++) {
-                    this.writer.print("(");
-                    for(int l = 1; l<=9; l++) {
-                        if(l==k) this.writer.print("l"+i+"c"+j+"v"+l);
-                        else this.writer.print("~"+"l"+i+"c"+j+"v"+l);
-                        if(l<9) this.writer.print(".");
-                    }
-                    this.writer.println(")");
-                    if(k<9)this.writer.print("+");
+    public void writeTrueValues() {
+        for (int lines = 0; lines <= 8; lines++) {
+            for (int col = 0; col <= 8; col++) {
+                if(cases[lines][col].getValue() != 0) {
+                    this.writer.print("l"+(lines+1)+"c"+(col+1)+"v"+cases[lines][col].getValue()+".");
                 }
-                this.writer.println(")");
-                if(j<9)this.writer.print(".");
-
             }
+        }
+    }
+
+
+    public void caseRules() {
+
+        for(int line = 1; line<=9; line++) {
+            for(int col = 1; col<=9; col++) {
+                for(int i = 1; i<=9; i++) {
+                    for(int j = 1; j<=9; j++) {
+                        if(i!=j) this.writer.println("(l"+line+"c"+col+"v"+i+" => ~l"+line+"c"+col+"v"+j+").");
+                    }
+                }
+            }
+        }
+    }
+
+    public void linesRules() {
+        this.writer.print("(");
+        for(int line = 1; line <= 9; line++) {
+            this.writer.print("(");
+            for(int val = 1; val<=9; val++) {
+                this.writer.print("(");
+                for(int col = 1; col<=9; col++) {
+                    this.writer.print("l"+line+"c"+col+"v"+val);
+                    if(col<9) this.writer.print("+");
+                }
+                this.writer.print(")");
+                if(val<9) this.writer.print(".");
+            }
+            this.writer.println(")");
+            if(line<9) this.writer.println(".");
         }
         this.writer.println(")");
     }
 
-    public void linesRules() {
-
-        //première ligne pour 1
-        //111 . ~211 .~311. ... ~911
-        //...
-        //~111. ~211. ~311. ... 911
-
-        //seconde ligne pour 7
-        //127 . ~227 .~327. ... ~927
-        //...
-        //~127. ~227. ~327. ... 927
-
-        //dernière ligne pour 4
-        //194 . ~294 .~394. ... ~994
-        //...
-        //~194. ~294. ~394. ... 994
-
+    public void colRules() {
         this.writer.print("(");
-        for(int j = 1; j <= 9; j++) {
+        for(int col = 1; col <= 9; col++) {
             this.writer.print("(");
-            for(int k = 1; k<=9; k++) {
+            for(int val = 1; val<=9; val++) {
                 this.writer.print("(");
-                for(int l = 1; l<=9; l++) {
-                    this.writer.print("(");
-                    for(int m = 1; m<=9; m++) {
-                        if(l==m) this.writer.print("l" + j + "c" + m + "v" + k);
-                        else this.writer.print("~l" + j + "c" + m + "v" + k);
-                        if(m<9) this.writer.print(".");
-                    }
-                    this.writer.println(")");
-                    if(l<9) this.writer.print("+");
+                for(int line = 1; line<=9; line++) {
+                    this.writer.print("l"+line+"c"+col+"v"+val);
+                    if(line<9) this.writer.print("+");
                 }
                 this.writer.print(")");
-                if(k<9) this.writer.println(".");
+                if(val<9) this.writer.print(".");
             }
             this.writer.println(")");
-            if(j<9) this.writer.println(".");
+            if(col<9) this.writer.println(".");
         }
-        this.writer.print(")");
+        this.writer.println(")");
 
     }
 
+    public void blocRules() {
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+
+                for(int val=1; val<=9;val++) {
+                    this.writer.print("(");
+                    for(int line = 1; line <= 3; line++) {
+
+                        for(int col = 1; col <= 3; col++) {
+                            this.writer.print("l"+(3 * i + line) + "c" + (3 * j + col) + "v"+val);
+                            if(col*line!=9) this.writer.print("+");
+                        }
+
+                    }
+                    this.writer.print(")");
+                    if(val<9)this.writer.print(".");
+                }
+                if(i*j!=4)this.writer.println(".");
+            }
+        }
+    }
 
 
 
@@ -142,8 +155,8 @@ public class Grid {
 
     public void displayGrid() {
         for (int lines = 0; lines <= 8; lines++) {
-            for (int colonne = 0; colonne <= 8; colonne++) {
-                System.out.print(cases[lines][colonne].getValue());
+            for (int col = 0; col <= 8; col++) {
+                System.out.print(cases[lines][col].getValue());
             }
             System.out.println("");
         }
